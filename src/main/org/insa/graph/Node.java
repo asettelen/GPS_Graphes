@@ -125,6 +125,18 @@ public final class Node implements Comparable<Node> {
     public List<Arc> getSuccessors() {
         return Collections.unmodifiableList(this.successors);
     }
+    
+    public ArrayList<Arc> getSuccessorsBis() {
+    	ArrayList<Arc> copie = new ArrayList<Arc>();
+    	for(int i=0;i<successors.size();i++)
+    	{
+    		if(!copie.contains(successors.get(i)))
+    		{
+    			copie.add(successors.get(i));
+    		}
+    	}
+        return copie;
+    }
 
     /**
      * @return Location of this node.

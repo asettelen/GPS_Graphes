@@ -33,6 +33,20 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         this.currentSize = 0;
         this.array = new ArrayList<E>();
     }
+    
+    public boolean exists(E o)
+    {
+    	int id = array.indexOf(o);
+		return (id != -1 && id < this.currentSize);
+    	
+        
+    }
+    
+    
+    public void update()
+    {
+    	percolateDown(0);
+    }
 
     /**
      * Construct a copy of the given heap.
