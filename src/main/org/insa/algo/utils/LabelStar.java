@@ -15,21 +15,6 @@ public class LabelStar extends Label {
     	return (mode == Mode.LENGTH) ? d : (d/((Math.max(data.getGraph().getGraphInformation().getMaximumSpeed(), data.getMaximumSpeed()) / 3.6))); 
     }
 
-	
-	/* 
-	protected double calcEstimatedCost(Node node, ShortestPathData data) {
-    	Point p1 = node.getPoint(); 
-    	Point p2 = data.getDestination().getPoint(); 
-    	if (data.getMode()==AbstractInputData.Mode.TIME) {
-    		int vitesse = Math.max(data.getGraph().getGraphInformation().getMaximumSpeed(), data.getMaximumSpeed()); 
-    		return Point.distance(p1, p2) / ((double) vitesse/3.6); 
-    	}
-    	else {
-    		return Point.distance(p1, p2);
-    	}
-	}
-	*/ 
-	
 	public LabelStar(Node noeud, ShortestPathData data) {
 		super(noeud);
 		this.estimatedCost = (float) calcEstimatedCost(noeud.getId(), data); 
@@ -40,3 +25,6 @@ public class LabelStar extends Label {
 		return this.cost + this.estimatedCost; 
 	}
 }
+
+
+

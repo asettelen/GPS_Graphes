@@ -42,15 +42,19 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Arc[] predecessorArcs = new Arc[data.getGraph().getNodes().size()];
         
         while((tasDeLabels.isEmpty() == false) && (resultatFinal == false)) {
-            
+            //System.out.println("taille du tas : " + tasDeLabels.size());
         	Label current = tasDeLabels.deleteMin(); 
         	notifyNodeMarked(current.getNode());
         	current.setMark();
+        	//System.out.println("cout du label marque : " + current.getCost()); 
         	
         	if (current.getNode() == data.getDestination()) {
         		coutFinal = current.getCost();
         		resultatFinal = true; 
         	}
+        	
+        	//afficher le nombre de successeurs testés à chaque itération (que le successeur soit déjà marqué ou non)
+        	//System.out.println("nombre de successeurs testés à chaque itération : " + current.getNode().getSuccessors().size());
         	
         	for(Arc a : current.getNode().getSuccessors()) {
         		
@@ -117,6 +121,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 			
 			Collections.reverse(arcs);
 			solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(data.getGraph(), arcs));
+			
+			//Affichage du nombre d'arcs du plus court chemin 
+			//System.out.println("nombre d'arcs du plus court chemin : " + arcs.size()); 
 		}
         
         return solution;

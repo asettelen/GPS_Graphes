@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.insa.algo.AbstractInputData;
 import org.insa.algo.ArcInspector;
 import org.insa.algo.ArcInspectorFactory;
+import org.insa.algo.shortestpath.AStarAlgorithm;
 import org.insa.algo.shortestpath.BellmanFordAlgorithm;
 import org.insa.algo.shortestpath.DijkstraAlgorithm;
 import org.insa.algo.shortestpath.ShortestPathData;
@@ -21,7 +22,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue; 
 
-public class DijkstraTest {
+public class AStarTest {
 	
 	@Test
 	public void testScenarioDistance() throws IOException{
@@ -45,28 +46,27 @@ public class DijkstraTest {
 		
 		ArcInspector arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		ShortestPathData data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		DijkstraAlgorithm D = new DijkstraAlgorithm(data);
-		ShortestPathSolution solution = D.run();
-		float coutDijkstra = D.getCoutFinal(); 
+		AStarAlgorithm A = new AStarAlgorithm(data);
+		ShortestPathSolution solution = A.run();
+		float coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en distance : " + solution);
 		
 		if (solution.getInputData().getMode() == AbstractInputData.Mode.LENGTH) {
-			assertEquals(coutDijkstra, solution.getPath().getLength(), 1e-6); 
+			assertEquals(coutAStar, solution.getPath().getLength(), 1e-6); 
 		}
 		else throw new IOException();
 		
 		System.out.println();
 		
-		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
-		solution = D.run();
-		coutDijkstra = D.getCoutFinal(); 
+		A = new AStarAlgorithm(data);
+		solution = A.run();
+		coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en temps : " + solution);
 		
 		if (solution.getInputData().getMode() == AbstractInputData.Mode.TIME) {
-			assertEquals((double) coutDijkstra, solution.getPath().getMinimumTravelTime(), 1e-3); 
+			assertEquals((double) coutAStar, solution.getPath().getMinimumTravelTime(), 1e-3); 
 		}
 		else throw new IOException();
 		
@@ -80,30 +80,30 @@ public class DijkstraTest {
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
-		solution = D.run();
-		coutDijkstra = D.getCoutFinal(); 
+		A = new AStarAlgorithm(data);
+		solution = A.run();
+		coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en distance : " + solution);
 		
 		if ((solution.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solution.getPath() != null) {
-			assertEquals(coutDijkstra, solution.getPath().getLength(), 1e-6); 
+			assertEquals(coutAStar, solution.getPath().getLength(), 1e-6); 
 		}
 		// test si chemin nul 
-		else assertEquals(coutDijkstra, 0, 1e-6);
+		else assertEquals(coutAStar, 0, 1e-6);
 		
 		System.out.println();
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
-		solution = D.run();
-		coutDijkstra = D.getCoutFinal(); 
+		A = new AStarAlgorithm(data);
+		solution = A.run();
+		coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en temps : " + solution);
 		
 		if ((solution.getInputData().getMode() == AbstractInputData.Mode.TIME) && solution.getPath() != null) {
-			assertEquals((double) coutDijkstra, solution.getPath().getMinimumTravelTime(), 1e-3); 
+			assertEquals((double) coutAStar, solution.getPath().getMinimumTravelTime(), 1e-3); 
 		}
-		else assertEquals(coutDijkstra, 0, 1e-3); 
+		else assertEquals(coutAStar, 0, 1e-3); 
 		
 		System.out.println();
 		
@@ -115,36 +115,35 @@ public class DijkstraTest {
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
-		solution = D.run();
-		coutDijkstra = D.getCoutFinal(); 
+		A = new AStarAlgorithm(data);
+		solution = A.run();
+		coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en distance : " + solution);
 		
 		if ((solution.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solution.getPath() != null) {
-			assertEquals(coutDijkstra, solution.getPath().getLength(), 1e-6); 
+			assertEquals(coutAStar, solution.getPath().getLength(), 1e-6); 
 		}
 		// test si chemin nul 
-		else assertEquals(coutDijkstra, 0, 1e-6);
+		else assertEquals(coutAStar, 0, 1e-6);
 		
 		System.out.println();
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
-		solution = D.run();
-		coutDijkstra = D.getCoutFinal(); 
+		A = new AStarAlgorithm(data);
+		solution = A.run();
+		coutAStar = A.getCoutFinal(); 
 		System.out.println("solution en temps : " + solution);
 		
 		if ((solution.getInputData().getMode() == AbstractInputData.Mode.TIME) && solution.getPath() != null) {
-			assertEquals((double) coutDijkstra, solution.getPath().getMinimumTravelTime(), 1e-3); 
+			assertEquals((double) coutAStar, solution.getPath().getMinimumTravelTime(), 1e-3); 
 		}
-		else assertEquals(coutDijkstra, 0, 1e-6); 
-		
+		else assertEquals(coutAStar, 0, 1e-6); 
 		System.out.println();
 	}
 	
 	@Test
-	public void testScenarioDistanceDijsktraBellmanFord() throws IOException{
+	public void testScenarioDistanceAStarBellmanFord() throws IOException{
 		String mapName = "C:\\Users\\antoi\\Desktop\\be-graphes\\Cartes\\europe\\france\\haute-garonne.mapgr";
 		int origine;
 		int destination;
@@ -154,50 +153,51 @@ public class DijkstraTest {
 		System.out.println("#####----- Mode : DISTANCE -------------------------------######");
 		System.out.println();
 		
+		GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+		
+		Graph graph = reader.read(); 
+		
+		
 		System.out.println("----- Cas d'un chemin simple ------");
 		origine = 38926;
 		destination = 59015;
 		
-		GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
-		
-		Graph graph = reader.read(); 
-	
 		ArcInspector arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		ShortestPathData data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		DijkstraAlgorithm D = new DijkstraAlgorithm(data);
+		AStarAlgorithm A = new AStarAlgorithm(data);
 		BellmanFordAlgorithm B = new BellmanFordAlgorithm(data); 
 		
-		ShortestPathSolution solutionD = D.run();
+		ShortestPathSolution solutionA = A.run();
 		ShortestPathSolution solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en distance : " + solutionD);
+		System.out.println("solution AStar en distance : " + solutionA);
 		System.out.println("solution Bellman en distance : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH)) {
-			assertEquals(solutionD.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH)) {
+			assertEquals(solutionA.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
 		}
 		else throw new IOException();
 		
 		System.out.println();
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
+		A = new AStarAlgorithm(data); 
 		B = new BellmanFordAlgorithm(data); 
 		
-		solutionD = D.run();
+		solutionA = A.run();
 		solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en temps : " + solutionD);
+		System.out.println("solution AStar en temps : " + solutionA);
 		System.out.println("solution Bellman en temps : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME)) {
-			assertEquals(solutionD.getPath().getMinimumTravelTime(),solutionB.getPath().getMinimumTravelTime(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME)) {
+			assertEquals(solutionA.getPath().getMinimumTravelTime(),solutionB.getPath().getMinimumTravelTime(), 1e-6); 
 		}
 		else throw new IOException();
 		
 		System.out.println();
-		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		System.out.println("----- Cas d'un chemin nul ------");
@@ -206,44 +206,43 @@ public class DijkstraTest {
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
+		A = new AStarAlgorithm(data);
 		B = new BellmanFordAlgorithm(data); 
 		
-		solutionD = D.run();
+		solutionA = A.run();
 		solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en distance : " + solutionD);
+		System.out.println("solution AStar en distance : " + solutionA);
 		System.out.println("solution Bellman en distance : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solutionD.getPath() != null && solutionB.getPath() != null) {
-			assertEquals(solutionD.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solutionA.getPath() != null && solutionB.getPath() != null) {
+			assertEquals(solutionA.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
 		}
 		else System.out.println("les deux solutions sont égales");
 		
 		System.out.println();
 		
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
+		A = new AStarAlgorithm(data);
 		B = new BellmanFordAlgorithm(data); 
 		
-		solutionD = D.run();
+		solutionA = A.run();
 		solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en temps : " + solutionD);
+		System.out.println("solution AStar en temps : " + solutionA);
 		System.out.println("solution Bellman en temps : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME) && solutionD.getPath() != null && solutionB.getPath() != null) {
-			assertEquals(solutionD.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME) && solutionA.getPath() != null && solutionB.getPath() != null) {
+			assertEquals(solutionA.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
 		}
 		else System.out.println("les deux solutions sont égales");
 		
 		System.out.println();
 		
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		System.out.println("----- Cas d'un chemin inexistant ------");
 		origine = 90912;
@@ -251,35 +250,38 @@ public class DijkstraTest {
 		
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(0);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
+		A = new AStarAlgorithm(data);
 		B = new BellmanFordAlgorithm(data); 
 		
-		solutionD = D.run();
+		solutionA = A.run();
 		solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en distance : " + solutionD);
+		System.out.println("solution AStar en distance : " + solutionA);
 		System.out.println("solution Bellman en distance : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solutionD.getPath() != null && solutionB.getPath() != null) {
-			assertEquals(solutionD.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.LENGTH) && solutionA.getPath() != null && solutionB.getPath() != null) {
+			assertEquals(solutionA.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
 		}
 		else System.out.println("les deux solutions sont égales");
 		
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		System.out.println();
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 		arcInspectorDijkstra = ArcInspectorFactory.getAllFilters().get(2);
 		data = new ShortestPathData(graph, graph.get(origine), graph.get(destination), arcInspectorDijkstra);			
-		D = new DijkstraAlgorithm(data);
+		A = new AStarAlgorithm(data);
 		B = new BellmanFordAlgorithm(data); 
 		
-		solutionD = D.run();
+		solutionA = A.run();
 		solutionB = B.run(); 
 		
-		System.out.println("solution Dijkstra en temps : " + solutionD);
+		System.out.println("solution AStar en temps : " + solutionA);
 		System.out.println("solution Bellman en temps : " + solutionB);
 		
-		if ((solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionD.getInputData().getMode() == AbstractInputData.Mode.TIME) && solutionD.getPath() != null && solutionB.getPath() != null) {
-			assertEquals(solutionD.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
+		if ((solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME) && (solutionA.getInputData().getMode() == AbstractInputData.Mode.TIME) && solutionA.getPath() != null && solutionB.getPath() != null) {
+			assertEquals(solutionA.getPath().getLength(),solutionB.getPath().getLength(), 1e-6); 
 		}
 		else System.out.println("les deux solutions sont égales");
 		
