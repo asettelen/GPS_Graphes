@@ -2,125 +2,124 @@ package org.insa.algo.shortestpath;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import org.insa.algo.AbstractSolution.Status;
 import org.insa.algo.utils.BinaryHeap;
-import org.insa.graph.Arc;
-import org.insa.graph.Graph;
-import org.insa.graph.Label;
-import org.insa.graph.Node;
-import org.insa.graph.Path;
+import org.insa.algo.utils.Label;
+import org.insa.graph.*;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
-	private Label labels[];
-	private int nodesNb; 
-	private Graph graph; 
-	private int origin, destination;
-	private BinaryHeap<Label> tas; 
-	private ShortestPathData data; 
 	
+	private float coutFinal; 
+	
+	protected Label newLabel(Node node, ShortestPathData data) {
+		return new Label(node); 
+	}
+
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
-        this.data = data;
-        this.graph = data.getGraph();
-        this.nodesNb = graph.size(); 
-        this.origin = data.getOrigin().getId();
-        this.destination = data.getDestination().getId();
-        this.tas = new BinaryHeap<>(); 
-        this.initialisationLabels();
+        this.coutFinal = 0; 
     }
     
-    private void initialisationLabels() {
-    	this.labels = new Label[nodesNb]; 
-    	for (int i=0; i<labels.length; i++) {
-    		labels[i].setId(i);
-    	}
-    	labels[this.origin].setCost(0);
-    	tas.insert(labels[this.origin]);
+    public float getCoutFinal() {
+    	return this.coutFinal;
     }
 
-    @Override
     protected ShortestPathSolution doRun() {
-        //ShortestPathData data = getInputData();
-        //ShortestPathSolution solution = null;
-        djikstraProcess();
-        return solution();
-    }
-    
-    protected ShortestPathSolution solution()
-    {
-    	if(labels[data.getDestination().getId()].getPere() == null)
-		{
-			return new ShortestPathSolution(data, Status.INFEASIBLE);
-		}
-		//notifyDestinationReached(data.getDestination());
-		
-		ArrayList<Arc> path = new ArrayList<Arc>();
-		Arc arc = labels[data.getDestination().getId()].getPere();
-		while (arc != null) {
-			path.add(arc);
-			arc = labels[arc.getOrigin().getId()].getPere();
-		}
-		Collections.reverse(path);
-		return new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, path));
-    }
-    
-    private void djikstraProcess()
-    {
-    	int idx;
-    	boolean condition = true; 
-    	do
-		{
-			Label lx = tas.deleteMin();
-			idx = lx.getId();
-			Node nx = graph.get(idx);
-			lx.setMarquage(condition);
+        ShortestPathData data = getInputData();
+        ShortestPathSolution solution = null;
+        BinaryHeap<Label> tasDeLabels = new BinaryHeap<Label>(); 
+        Label tableauDeLabels[] = new Label[data.getGraph().getNodes().size()]; 
+        boolean resultatFinal = false; 
+        
+        tableauDeLabels[data.getOrigin().getId()] = newLabel(data.getOrigin(), data);
+        tasDeLabels.insert(tableauDeLabels[data.getOrigin().getId()]);
+        tableauDeLabels[data.getOrigin().getId()].setInTas();
+        tableauDeLabels[data.getOrigin().getId()].setCost(0);
+        
+        notifyOriginProcessed(data.getOrigin());
+        
+        Arc[] predecessorArcs = new Arc[data.getGraph().getNodes().size()];
+        
+        while((tasDeLabels.isEmpty() == false) && (resultatFinal == false)) {
+            
+        	Label current = tasDeLabels.deleteMin(); 
+        	notifyNodeMarked(current.getNode());
+        	current.setMark();
+        	
+        	if (current.getNode() == data.getDestination()) {
+        		coutFinal = current.getCost();
+        		resultatFinal = true; 
+        	}
+        	
+        	for(Arc a : current.getNode().getSuccessors()) {
+        		
+        		
+        		if (!data.isAllowed(a)) continue;
+        		
+        		if (tableauDeLabels[a.getDestination().getId()] == null) {
+        			notifyNodeReached(a.getDestination());
+        			tableauDeLabels[a.getDestination().getId()] = newLabel(a.getDestination(), data); 
+        		}
+        		
+        		if (tableauDeLabels[a.getDestination().getId()].getMark() == false) {
+        			
+        			if (tableauDeLabels[a.getDestination().getId()].getCost() > current.getCost() + data.getCost(a)) {
+        				tableauDeLabels[a.getDestination().getId()].setCost(current.getCost() + (float) data.getCost(a)); 
+        				
+        				//Vérifier que le coût des labels marqués est croissant au cours des itérations ;
+        				//System.out.println("" + a.getDestination().getId() + " " + tableauDeLabels[a.getDestination().getId()].getCost());
+        				
+        				tableauDeLabels[a.getDestination().getId()].setFather(current.getNode());
+        				
+        				if (tableauDeLabels[a.getDestination().getId()].getInTas()) {
+        					tasDeLabels.remove(tableauDeLabels[a.getDestination().getId()]);	
+        				}
+        				else tableauDeLabels[a.getDestination().getId()].setInTas();
+        					
+        				tasDeLabels.insert(tableauDeLabels[a.getDestination().getId()]);
+        				
+        				//Afficher l’évolution de la taille du tas ;
+        				//System.out.println("" + tasDeLabels.size()); 
+        				
+        				predecessorArcs[a.getDestination().getId()] = a; 
+        				//int compteur = 0; 
+        				// Afficher le nombre d’arcs du plus court chemin, le nombre d’itérations de l’algorithme.
+        				/*
+        				for(int k=0; k<predecessorArcs.length; k++) {
+        					if (predecessorArcs[k] != null) {
+        						compteur++; 
+        					}
+        				}
+        				
+        				System.out.println(compteur);
+        				
+        				*/
+        				
+        				
+        			}
+        		}
+        	}
+        }
+        
+        if (predecessorArcs[data.getDestination().getId()] == null) {
+			solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+		} else {
 			
-			ArrayList<Arc> successors = nx.getSuccessorsBis();
-			
-			for(Arc successor : successors)
-			{
-				if(data.isAllowed(successor))
-				{
-					Label ly = labels[successor.getDestination().getId()];
-					
-					if(!ly.getMarquage())
-					{
-						double newCost = lx.getCost() + data.getCost(successor);
-						if(ly.getCost()>newCost)
-						{
-							ly.setCost(newCost);
-							if(!tas.exists(ly))
-							{
-								tas.insert(ly);
-								//notify Ã  placer ici
-							}
-							else
-							{
-								tas.update();
-							}
-							ly.setPere(successor);
-						}
-					}
-					
-				}
-				
+			notifyDestinationReached(data.getDestination());
+			ArrayList<Arc> arcs = new ArrayList<Arc>();	
+			Arc arc = predecessorArcs[data.getDestination().getId()];
+
+			while (arc != null) {
+				arcs.add(arc);
+				arc = predecessorArcs[arc.getOrigin().getId()];
 			}
-				
-		
-		}while(!tas.isEmpty() && idx != this.destination);
+			
+			Collections.reverse(arcs);
+			solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(data.getGraph(), arcs));
+		}
+        
+        return solution;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
+
